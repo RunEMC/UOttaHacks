@@ -121,6 +121,34 @@ class Home extends React.Component {
     console.log(questions)
   }
 
+  updateUserStatus(user) {
+    var statuses = this.state.userStatus;
+    statuses[user] = !this.state.userStatus[user];
+    var ready = statuses[user] ? this.state.usersReady + 1 : this.state.usersReady - 1; 
+    this.setState({
+        userStatus: statuses,
+        usersReady: ready
+    });
+    if (this.state.usersReady >= this.state.users.length) {
+        this.props.history.push('/ask/');
+    }
+  }
+
+  updateUsers(name) {
+    var us = this.state.users;
+    us.push(name);
+    var statuses = this.state.userStatus;
+    statuses[name] = false;
+    this.setState({
+      users: us,
+      userStatus: statuses
+    });
+  }
+
+  updateAndSetQuestions(questions) {
+    console.log(questions)
+  }
+
   handleChange = field => event => {
     this.setState({ [field]: event.target.value });
     if (event.target.value.length > 0) {
