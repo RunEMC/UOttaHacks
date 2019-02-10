@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
-import { CssBaseline, withStyles, } from '@material-ui/core';
+import { CssBaseline, withStyles, Button } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+import TopicSubscriber from './services/TopicSubscriber'
 
 const styles = theme => ({
   mainContainer: {
@@ -18,14 +20,34 @@ const styles = theme => ({
   }
 });
 
-const App = ({ classes }) => (
-  <Router>
-    <div className={classes.mainContainer}>
-      <Fragment>
-        <CssBaseline />
-      </Fragment>
-    </div>
-  </Router>
-);
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      session: props.session
+    }
+    
+    var subscriber = new TopicSubscriber(this.state.session, 'uottahacks');
+    subscriber.run();
+  }
+
+  render() {
+    const { classes } = this.props;
+
+    return(
+      <Router>
+        <div className={classes.mainContainer}>
+          <Fragment>
+            <CssBaseline />
+            <Button onClick={this.sendMsg}>
+              Send Msg
+            </Button>
+          </Fragment>
+        </div>
+      </Router>
+    );
+  }
+}
 
 export default withStyles(styles)(App);

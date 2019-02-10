@@ -74,10 +74,10 @@ class TopicPublisher {
             if (this.session !== null) {
                 var messageText = 'Sample Message';
                 var message = solace.SolclientFactory.createMessage();
-                message.setDestination(solace.SolclientFactory.createTopicDestination("Uottahack"));
+                message.setDestination(solace.SolclientFactory.createTopicDestination("uottahacks"));
                 message.setBinaryAttachment(messageText);
                 message.setDeliveryMode(solace.MessageDeliveryModeType.DIRECT);
-                console.log('Publishing message "' + messageText + '" to topic "' + "Uottahack" + '"...');
+                console.log('Publishing message "' + messageText + '" to topic "' + "uottahacks" + '"...');
                 try {
                     publisher.send(message);
                     console.log('Message published.');
