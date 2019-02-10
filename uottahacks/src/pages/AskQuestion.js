@@ -3,6 +3,8 @@ import { CssBaseline, withStyles, Button, TextField, Paper } from '@material-ui/
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import TopicPublisher from '../services/TopicPublisher';
+import TopicSubscriber from '../services/TopicSubscriber';
+
 
 const styles = theme => ({
   mainContainer: {
@@ -18,17 +20,28 @@ const styles = theme => ({
   }
 });
 
-class Home extends React.Component {
+class AskQuestion extends React.Component {
   constructor(props) {
     super(props);
 
-
     this.state = {
       session: props.session,
-      input: ''
+      input: '',
+      isDone: false,
+      readyStatus: "Ready Up",
+      usersReady: 0,
+      userCount: 0
     }
 
     this.sendMsg = this.sendMsg.bind(this);
+    this.registerDone = this.registerDone.bind(this);
+
+    var usercountSubscriber = new TopicSubscriber(this, 'usercount');
+    usercountSubscriber.run();
+
+    var donequestionsSubscriber = new TopicSubscriber(this, 'donequestions');
+    donequestionsSubscriber.run();
+
   }
 
   sendMsg() {
@@ -41,8 +54,34 @@ class Home extends React.Component {
     })
   }
 
+  beginRequestingQuestions() {
+    var publisher = new TopicPublisher('getusers');
+    publisher.publish(this.state.input);
+  }
+
   registerDone() {
-      
+    this.setState({
+        isDone: true
+    });
+    var publisher = new TopicPublisher('donequestions');
+    publisher.publish(this.state.input);
+  }
+
+  updateUserCount(count) {
+      this.setState({
+          userCount: parseInt(count)
+      })
+  }
+
+  updateWaitingClients(name) {
+    var nowReady = this.state.usersReady + 1;
+    if (nowReady >= this.state.userCount) {
+        this.props.history.push('/answer/');
+    } else {
+        this.setState({
+            usersReady: nowReady
+        });
+    }
   }
 
   handleChange = field => event => {
@@ -57,6 +96,7 @@ class Home extends React.Component {
         <Paper className={classes.container}>
             <form className={classes.container} noValidate autoComplete="off">
                 <TextField
+                disabled={this.state.isDone}
                 id="question"
                 label="Question"
                 multiline
@@ -66,12 +106,12 @@ class Home extends React.Component {
                 margin="normal"
                 fullWidth
                 />
-                <Button className={classes.button} onClick={this.sendMsg}>
+                <Button disabled={this.state.isDone} className={classes.button} onClick={this.sendMsg}>
                     Ask Question
                 </Button>
                 <div className={classes.space}></div>
-                <Button className={classes.button} onClick={this.registerDone}>
-                    Done
+                <Button disabled={this.state.isDone} className={classes.button} onClick={this.registerDone}>
+                    {this.state.readyStatus}
                 </Button>
             </form>
         </Paper>
@@ -80,4 +120,4 @@ class Home extends React.Component {
   }
 }
 
-export default withStyles(styles)(Home);
+export default withStyles(styles)(AskQuestion);

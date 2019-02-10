@@ -46,17 +46,15 @@ class App extends React.Component {
 
     var statusSubscriber = new TopicSubscriber(this, 'userstatus');
     statusSubscriber.run();
+
+    var statusSubscriber = new TopicSubscriber(this, 'requestquestions');
+    statusSubscriber.run();
   }
 
   updateUserStatus(user) {
-    console.log(this.state.userStatus[user]);
     var newUsers = this.state.usersReady;
     var statuses = this.state.userStatus;
     if (this.state.userStatus[user]) {
-      if (this.state.usersReady + 1 >= this.state.users.length) {
-        var publisher = new TopicPublisher(this.state.session, 'askpage');
-        publisher.publish(this.state.questions);
-      }
       newUsers += 1;
     } else {
       newUsers -= 1;
@@ -69,7 +67,6 @@ class App extends React.Component {
   }
 
   updateView(msg) {
-    console.log("Updating:" + msg);
     var qs = this.state.questions;
     qs.push(msg);
     this.setState({
@@ -85,6 +82,19 @@ class App extends React.Component {
     this.setState({
       users: us,
       userStatus: statuses
+    });
+  }
+
+  sendUsers(name) {
+    var publisher = new TopicPublisher(this.state.session, 'userCount');
+    publisher.publish(this.state.users.length.toString());
+  }
+
+  sendQuestions(name) {
+    console.log("Sending Questions");
+    var publisher = new TopicPublisher(this.state.session, 'askpage');
+    this.state.questions.forEach(question => {
+      publisher.publish(question);
     });
   }
 

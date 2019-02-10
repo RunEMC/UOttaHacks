@@ -100,6 +100,13 @@ class TopicSubscriber {
                 case "userstatus":
                     view.updateUserStatus(message.getBinaryAttachment());
                     break;
+                case "requestquestions":
+                    view.sendQuestions(message.getBinaryAttachment());
+                    break;
+                case "getusers":
+                    view.sendUsers(message.getBinaryAttachment());
+                    break;
+                    
                 default:
                     view.updateView(message.getBinaryAttachment());
             }
