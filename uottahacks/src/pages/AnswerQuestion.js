@@ -1,7 +1,8 @@
 import React, { Fragment, Children } from 'react';
-import { CssBaseline, withStyles, Button, TextField, Card, CardContent, ExpansionPanel, ExpansionPanelDetails } from '@material-ui/core';
+import { CssBaseline, withStyles, Button, TextField,Paper, Card, CardContent, ExpansionPanel, ExpansionPanelDetails } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CardActions from '@material-ui/core/CardActions';
+
 
 import Typography from '@material-ui/core/Typography';
 
@@ -49,25 +50,29 @@ class AnswerQuestion extends React.Component {
 
     return(
     <div className={classes.mainContainer}>
-     <Card className={classes.card} styles="width:10px;height:10px;">
-    <CardContent>
-       <Typography gutterBottom variant="h5" component="h2">
-       Question 1</Typography>
-    </CardContent>
-    <CardActions>
-        <Button size="small">Answer This Question</Button>
-      </CardActions>
-    </Card>
-    
-    <div>
-       <form>
-       <textarea styles="font-family:Helvetica;font-size:12px;" align="center"
-       value="Enter your answer here..." rows="15" cols="50"/>
+     <Paper className={classes.container}>
+      <form className={classes.container} noValidate autoComplete="off">
+       <Card className={classes.card} styles="width:10px;height:10px;">
+        <CardContent>
+          <Typography variant="h5" component="h2">
+           Question 1</Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small">Answer This Question</Button>
+        </CardActions>
+       </Card>
+       </form>  
+       <form className={classes.container}>
+       <textarea styles="font-family:Helvetica;font-size:12px;"
+       align="center"
+       value="Enter your answer here..." 
+       rows="15" cols="50"
+       onChange={this.handleChange('input')}/>
        <br/>
-          <input type="submit" value="Submit Answer" align="right"/>
+       
+        <input type="submit" value="Submit Answer" align="right"/>
        </form>
-    </div>
-    
+    </Paper>
     </div>
     );
   }
