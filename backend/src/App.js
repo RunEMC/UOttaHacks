@@ -11,7 +11,6 @@ const styles = theme => ({
     height: '100%'
   },
   root: {
-    backgroundColor: '#F1F1F1',
     width: '100%',
     boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)'
   },
@@ -56,17 +55,21 @@ class App extends React.Component {
         <Grid container className={classes.grid} spacing={24} direction="row">
 
           <Grid item xs className={classes.gridItem}>
-            <List className={classes.root}>
-            <Typography>Questions</Typography>
-              {listQuestions}
-            </List>
+            <Paper>
+              <List className={classes.root}>
+              <Typography className={classes.grid}>Questions</Typography>
+                {listQuestions}
+              </List>
+            </Paper>
           </Grid>
 
           <Grid item xs className={classes.gridItem}>
-            <List className={classes.root}>
-            <Typography>Current Students</Typography>
-              <ListItem>Test</ListItem>
-            </List>
+            <Paper>
+              <List className={classes.root}>
+              <Typography className={classes.grid}>Current Students</Typography>
+                <ListItem>Test</ListItem>
+              </List>
+            </Paper>
           </Grid>
 
         </Grid>
