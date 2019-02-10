@@ -69,6 +69,7 @@ class AnswerQuestion extends React.Component {
        align="center"
        value="Enter your answer here..." 
        rows="15" cols="50"
+       
        onChange={this.handleChange('input')}/>
        <br/>
        <button value="submit" onClick={()=>this.handleChange} align="right">Submit Answer</button>
