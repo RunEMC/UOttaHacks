@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import { CssBaseline, withStyles, Button, TextField } from '@material-ui/core';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import TopicPublisher from './services/TopicPublisher';
 import AnswerQuestion from './pages/AnswerQuestion';
+import AskQuestion from './pages/AskQuestion';
 import Home from './pages/Home';
 
 const styles = theme => ({
@@ -51,12 +52,17 @@ class App extends React.Component {
     return(
       <Router>
         <div className={classes.mainContainer}>
+          <div>
+            <Link to="/" className={classes.text}>Home</Link>
+            <Link to="/answer/" className={classes.text}>Answer</Link>
+            <Link to="/ask/" className={classes.text}>Ask</Link>
+          </div>
           <Fragment>
             <CssBaseline />
             <div classes={classes.main}>
               <Route exact path="/" component={Home} />
               <Route path="/answer/" component={AnswerQuestion} />
-              <Route path="/ask/" component={AnswerQuestion} />
+              <Route path="/ask/" component={AskQuestion} />
             </div>
           </Fragment>
         </div>
