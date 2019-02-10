@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
-import { CssBaseline, withStyles, Button, TextField } from '@material-ui/core';
+import { CssBaseline, withStyles, Button, TextField, Paper } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
+import TopicPublisher from '../services/TopicPublisher';
 
 const styles = theme => ({
   headingOne:{
@@ -32,39 +33,62 @@ class Home extends React.Component {
     this.state = {
       session: props.session,
       input: '',
-      
+      isSignedIn: false,
+      isBlank: true,
     }
 
     this.sendMsg = this.sendMsg.bind(this);
   }
 
   sendMsg() {
-    console.log("Sending msg" + this.state.session);
+    console.log("Sending id: " + this.state.input);
     // create the publisher, specifying the name of the subscription topic
-    // var publisher = new TopicPublisher(this.state.session, 'tutorial/topic');
-    // publisher.publish(this.state.input);
+    var publisher = new TopicPublisher('userid');
+    publisher.publish(this.state.input);
+    this.setState({
+        isSignedIn: true
+    });
   }
 
   handleChange = field => event => {
     this.setState({ [field]: event.target.value });
+    if (event.target.value.length > 0) {
+        this.setState({
+            isBlank: false
+        });
+    } else {
+        this.setState({
+            isBlank: true
+        });
+    }
   };
 
   render() {
     const { classes } = this.props;
 
     return(
-    <div className={classes.mainContainer}>
-    
-    <h1 className={classes.headingOne}>Welcome</h1>
-    <h2 className={classes.headingTwo}>I want to:</h2>
-    <Button variant="contained" color="primary">
-      Ask
-    </Button>
-    <Button variant="contained" color="primary">
-      Done
-    </Button>
+    <Paper className={classes.main}>
+        <h1 className={classes.headingOne}>Welcome</h1>
+        <h2 className={classes.headingTwo}>I want to:</h2>
+        <form className={classes.container} noValidate autoComplete="off">
+            <TextField
+            disabled={this.state.isSignedIn}
+            id="name"
+            label="Name"
+            className={classes.textField}
+            value={this.state.input}
+            onChange={this.handleChange('input')}
+            margin="normal"
+            />
+            <Button disabled={this.state.isSignedIn || this.state.isBlank} className={classes.button} onClick={this.sendMsg}>
+                Sign In
+            </Button>
+            <Button className={classes.button} onClick={this.registerDone}>
+                Done
+            </Button>
+        </form>
    
-    </div>
+    </Paper>
     );
   }
 }

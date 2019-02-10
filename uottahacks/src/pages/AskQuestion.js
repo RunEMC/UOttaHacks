@@ -22,6 +22,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
 
+
     this.state = {
       session: props.session,
       input: ''
@@ -31,10 +32,17 @@ class Home extends React.Component {
   }
 
   sendMsg() {
-    console.log("Sending msg" + this.state.session);
+    console.log("Sending msg " + this.state.input);
     // create the publisher, specifying the name of the subscription topic
-    var publisher = new TopicPublisher(this.state.session, 'tutorial/topic');
+    var publisher = new TopicPublisher('uottahacks');
     publisher.publish(this.state.input);
+    this.setState({
+        input: ''
+    })
+  }
+
+  registerDone() {
+      
   }
 
   handleChange = field => event => {
@@ -60,6 +68,10 @@ class Home extends React.Component {
                 />
                 <Button className={classes.button} onClick={this.sendMsg}>
                     Ask Question
+                </Button>
+                <div className={classes.space}></div>
+                <Button className={classes.button} onClick={this.registerDone}>
+                    Done
                 </Button>
             </form>
         </Paper>

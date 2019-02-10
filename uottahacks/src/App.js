@@ -38,7 +38,7 @@ class App extends React.Component {
   sendMsg() {
     console.log("Sending msg" + this.state.session);
     // create the publisher, specifying the name of the subscription topic
-    var publisher = new TopicPublisher(this.state.session, 'tutorial/topic');
+    var publisher = new TopicPublisher(this.state.session, 'uottahacks');
     publisher.publish(this.state.input);
   }
 
