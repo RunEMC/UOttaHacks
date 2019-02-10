@@ -28,7 +28,7 @@
 import solace from 'solclientjs';
 
 class TopicPublisher {
-    constructor(sess, topic) {
+    constructor(topic) {
         this.publisher = {
             // session: sess,
             topicName: topic
@@ -53,24 +53,12 @@ class TopicPublisher {
         }
     }
 
-    run() {
-        this.publish();
-        // this.publisher.exit();
-        // connect the session
-        // try {
-        //     this.session.connect();
-        // } catch (error) {
-        //     console.log(error.toString());
-        // }
-    }
-
     // Publishes one message
     publish(messageText) {
         var publisher = this.session;
         // define session event listeners
         this.session.on(solace.SessionEventCode.UP_NOTICE, function (sessionEvent) {
             console.log('=== Successfully connected and ready to publish messages. ===');
-            // publisher.publish();
             if (this.session !== null) {
                 console.log(messageText);
                 var message = solace.SolclientFactory.createMessage();
@@ -87,7 +75,6 @@ class TopicPublisher {
             } else {
                 console.log('Cannot publish because not connected to Solace message router.');
             }
-            // this.publisher.exit();
         });
         this.session.on(solace.SessionEventCode.CONNECT_FAILED_ERROR, function (sessionEvent) {
             console.log('Connection failed to the message router: ' + sessionEvent.infoStr +
