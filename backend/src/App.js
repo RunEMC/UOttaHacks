@@ -25,13 +25,17 @@ class App extends React.Component {
 
     this.state = {
       session: props.session,
-      questions: []
+      questions: [],
+      users: []
     }
     
     this.updateView = this.updateView.bind(this);
 
-    var subscriber = new TopicSubscriber(this, 'uottahacks');
-    subscriber.run();
+    var dataSubscriber = new TopicSubscriber(this, 'uottahacks');
+    dataSubscriber.run();
+
+    var idSubscriber = new TopicSubscriber(this, 'userid');
+    idSubscriber.run();
   }
 
   updateView(msg) {
@@ -43,11 +47,22 @@ class App extends React.Component {
     });
   }
 
+  updateUsers(name) {
+    var us = this.state.users;
+    us.push(name);
+    this.setState({
+      users: us
+    });
+  }
+
   render() {
     const { classes } = this.props;
     const listQuestions = this.state.questions.map((question) => (
       <ListItem><Typography>{question}</Typography></ListItem>
-    ))
+    ));
+    const listNames = this.state.users.map((user) => (
+      <ListItem><Typography>{user}</Typography></ListItem>
+    ));
 
     return(
       <div className={classes.mainContainer}>
@@ -67,7 +82,7 @@ class App extends React.Component {
             <Paper>
               <List className={classes.root}>
               <Typography className={classes.grid}>Current Students</Typography>
-                <ListItem>Test</ListItem>
+                {listNames}
               </List>
             </Paper>
           </Grid>
