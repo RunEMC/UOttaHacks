@@ -58,6 +58,7 @@ class TopicSubscriber {
     run() {
         var subscriberSession = this.session;
         var view = this.subscriber.view;
+        var topic = this.subscriber.topicName;
 
         // define session event listeners
         this.session.on(solace.SessionEventCode.UP_NOTICE, function (sessionEvent) {
@@ -68,12 +69,12 @@ class TopicSubscriber {
                 //     console.log('Already subscribed to "' + this.subscriber.topicName
                 //         + '" and ready to receive messages.');
                 // } else {
-                    console.log('Subscribing to topic: ' + "uottahacks");
+                    console.log('Subscribing to topic: ' + topic);
                     try {
                         subscriberSession.subscribe(
-                            solace.SolclientFactory.createTopicDestination("uottahacks"),
+                            solace.SolclientFactory.createTopicDestination(topic),
                             true, // generate confirmation when subscription is added successfully
-                            "uottahacks", // use topic name as correlation key
+                            topic, // use topic name as correlation key
                             10000 // 10 seconds timeout for this operation
                         );
                     } catch (error) {

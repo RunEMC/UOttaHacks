@@ -56,16 +56,18 @@ class TopicPublisher {
     // Publishes one message
     publish(messageText) {
         var publisher = this.session;
+        var topic = this.subscriber.topicName;
+
         // define session event listeners
         this.session.on(solace.SessionEventCode.UP_NOTICE, function (sessionEvent) {
             console.log('=== Successfully connected and ready to publish messages. ===');
             if (this.session !== null) {
                 console.log(messageText);
                 var message = solace.SolclientFactory.createMessage();
-                message.setDestination(solace.SolclientFactory.createTopicDestination("uottahacks"));
+                message.setDestination(solace.SolclientFactory.createTopicDestination(topic));
                 message.setBinaryAttachment(messageText);
                 message.setDeliveryMode(solace.MessageDeliveryModeType.DIRECT);
-                console.log('Publishing message "' + messageText + '" to topic "' + "uottahacks" + '"...');
+                console.log('Publishing message "' + messageText + '" to topic "' + topic + '"...');
                 try {
                     publisher.send(message);
                     console.log('Message published.');

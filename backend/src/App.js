@@ -30,8 +30,11 @@ class App extends React.Component {
     
     this.updateView = this.updateView.bind(this);
 
-    var subscriber = new TopicSubscriber(this, 'uottahacks');
-    subscriber.run();
+    var dataSubscriber = new TopicSubscriber(this, 'uottahacks');
+    dataSubscriber.run();
+
+    var idSubscriber = new TopicSubscriber(this, 'userid');
+    idSubscriber.run();
   }
 
   updateView(msg) {
