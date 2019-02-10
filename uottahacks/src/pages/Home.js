@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { CssBaseline, withStyles, Button, TextField, Paper, List, ListItem, Typography } from '@material-ui/core';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
 import CheckmarkIcon from '@material-ui/icons/CheckCircleOutline'
 
 import TopicPublisher from '../services/TopicPublisher';
@@ -85,9 +85,16 @@ class Home extends React.Component {
   updateUserStatus(user) {
     var statuses = this.state.userStatus;
     statuses[user] = !this.state.userStatus[user];
+    var ready = statuses[user] ? this.state.usersReady + 1 : this.state.usersReady - 1; 
     this.setState({
-        userStatus: statuses
+        userStatus: statuses,
+        usersReady: ready
     });
+    console.log(this.state);
+    if (this.state.usersReady >= this.state.users.length) {
+        console.log(this.props);
+        this.props.history.push('/ask/');
+    }
   }
 
   updateUsers(name) {
