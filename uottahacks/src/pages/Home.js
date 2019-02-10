@@ -3,6 +3,7 @@ import { CssBaseline, withStyles, Button, TextField, Paper } from '@material-ui/
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import TopicPublisher from '../services/TopicPublisher';
+import Image from'../Logo/YesBrainerLogo.png';
 
 const styles = theme => ({
   headingOne:{
@@ -68,6 +69,7 @@ class Home extends React.Component {
 
     return(
     <Paper className={classes.main}>
+    <img ref={Image} sizes="20px"/>
         <h1 className={classes.headingOne}>Welcome</h1>
         <h2 className={classes.headingTwo}>I want to:</h2>
         <form className={classes.container} noValidate autoComplete="off">

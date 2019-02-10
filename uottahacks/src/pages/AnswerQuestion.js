@@ -63,14 +63,15 @@ class AnswerQuestion extends React.Component {
        </Card>
        </form>  
        <form className={classes.container}>
+       <br/>
+       <br/>
        <textarea styles="font-family:Helvetica;font-size:12px;"
        align="center"
        value="Enter your answer here..." 
        rows="15" cols="50"
        onChange={this.handleChange('input')}/>
        <br/>
-       
-        <input type="submit" value="Submit Answer" align="right"/>
+       <button value="submit" onClick={()=>this.handleChange} align="right">Submit Answer</button>
        </form>
     </Paper>
     </div>
