@@ -6,6 +6,7 @@ import TopicPublisher from './services/TopicPublisher';
 import AnswerQuestion from './pages/AnswerQuestion';
 import AskQuestion from './pages/AskQuestion';
 import Home from './pages/Home';
+import spacing from '@material-ui/core/styles/spacing';
 
 const styles = theme => ({
   mainContainer: {
@@ -54,6 +55,7 @@ class App extends React.Component {
         <div className={classes.mainContainer}>
         <head Title="YesBrainer"></head>
           <div>
+          <img src="YesBrainerLogo.png" width="60" height="40"/>
             <Link to="/" className={classes.text}>Home</Link>
             <Link to="/answer/" className={classes.text}>Answer</Link>
             <Link to="/ask/" className={classes.text}>Ask</Link>
