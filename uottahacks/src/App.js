@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { CssBaseline, withStyles, Button, TextField, AppBar } from '@material-ui/core';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-
+import image from './Logo/YesBrainerLogo.png';
 import TopicPublisher from './services/TopicPublisher';
 import AnswerQuestion from './pages/AnswerQuestion';
 import AskQuestion from './pages/AskQuestion';
