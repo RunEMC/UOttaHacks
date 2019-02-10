@@ -77,6 +77,7 @@ class TopicSubscriber {
                             topic, // use topic name as correlation key
                             10000 // 10 seconds timeout for this operation
                         );
+                        view.beginRequestingQuestions();
                     } catch (error) {
                         console.log(error.toString());
                     }
@@ -101,7 +102,13 @@ class TopicSubscriber {
                     view.updateUserStatus(message.getBinaryAttachment());
                     break;
                 case "askpage":
-                    view.updateUserStatus(message.getBinaryAttachment());
+                    view.updateAndSetQuestions(message.getBinaryAttachment());
+                    break;
+                case "donequestions":
+                    view.updateWaitingClients(message.getBinaryAttachment());
+                    break;
+                case "usercount":
+                    view.updateUserCount(message.getBinaryAttachment());
                     break;
                 default:
                     view.updateView(message.getBinaryAttachment());

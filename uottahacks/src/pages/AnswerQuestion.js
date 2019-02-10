@@ -1,9 +1,10 @@
 import React, { Fragment, Children } from 'react';
-import { CssBaseline, withStyles, Button, TextField, Card, CardContent, ExpansionPanel, ExpansionPanelDetails } from '@material-ui/core';
+import { CssBaseline, withStyles, Button, TextField, Card, CardContent, ExpansionPanel, ExpansionPanelDetails, Typography } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CardActions from '@material-ui/core/CardActions';
 
-import Typography from '@material-ui/core/Typography';
+import TopicPublisher from '../services/TopicSubscriber';
+import TopicSubscriber from '../services/TopicSubscriber';
 
 const styles = theme => ({
   mainContainer: {
@@ -31,6 +32,19 @@ class AnswerQuestion extends React.Component {
     }
 
     this.sendMsg = this.sendMsg.bind(this);
+
+    var questionSubscriber = new TopicSubscriber(this, 'askpage');
+    questionSubscriber.run();
+  }
+
+  beginRequestingQuestions() {
+    console.log("Requesting questions");
+    var publisher = new TopicPublisher('requestquestions');
+    publisher.publish(this.state.input);
+    this.setState({
+        isSignedIn: true,
+        user: this.state.input
+    });
   }
 
   sendMsg() {
@@ -38,6 +52,10 @@ class AnswerQuestion extends React.Component {
     // create the publisher, specifying the name of the subscription topic
     // var publisher = new TopicPublisher(this.state.session, 'tutorial/topic');
     // publisher.publish(this.state.input);
+  }
+
+  updateAndSetQuestions(question) {
+    console.log(question)
   }
 
   handleChange = field => event => {
