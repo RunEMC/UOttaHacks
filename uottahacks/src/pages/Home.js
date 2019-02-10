@@ -55,6 +55,7 @@ class Home extends React.Component {
     return(
     <div className={classes.mainContainer}>
     
+    
     <h1 className={classes.headingOne}>Welcome</h1>
     <h2 className={classes.headingTwo}>I want to:</h2>
     <Button variant="contained" color="primary">
