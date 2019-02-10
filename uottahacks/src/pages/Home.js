@@ -46,7 +46,8 @@ class Home extends React.Component {
       isDone: false,
       readyStatus: "Ready Up",
       userStatus: {},
-      user: ''
+      user: '',
+      usersReady: 0
     }
 
     this.sendMsg = this.sendMsg.bind(this);

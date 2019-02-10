@@ -100,6 +100,9 @@ class TopicSubscriber {
                 case "userstatus":
                     view.updateUserStatus(message.getBinaryAttachment());
                     break;
+                case "askpage":
+                    view.updateUserStatus(message.getBinaryAttachment());
+                    break;
                 default:
                     view.updateView(message.getBinaryAttachment());
             }
