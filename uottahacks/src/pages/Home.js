@@ -90,9 +90,7 @@ class Home extends React.Component {
         userStatus: statuses,
         usersReady: ready
     });
-    console.log(this.state);
     if (this.state.usersReady >= this.state.users.length) {
-        console.log(this.props);
         this.props.history.push('/ask/');
     }
   }
@@ -117,6 +115,10 @@ class Home extends React.Component {
       users: us,
       userStatus: statuses
     });
+  }
+
+  updateAndSetQuestions(questions) {
+    console.log(questions)
   }
 
   handleChange = field => event => {

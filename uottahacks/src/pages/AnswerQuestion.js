@@ -39,6 +39,19 @@ class AnswerQuestion extends React.Component {
     }
 
     this.sendMsg = this.sendMsg.bind(this);
+
+    var questionSubscriber = new TopicSubscriber(this, 'askpage');
+    questionSubscriber.run();
+  }
+
+  beginRequestingQuestions() {
+    console.log("Requesting questions");
+    var publisher = new TopicPublisher('requestquestions');
+    publisher.publish(this.state.input);
+    this.setState({
+        isSignedIn: true,
+        user: this.state.input
+    });
   }
 
   sendMsg() {
