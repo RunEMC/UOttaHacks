@@ -62,7 +62,6 @@ class TopicPublisher {
         this.session.on(solace.SessionEventCode.UP_NOTICE, function (sessionEvent) {
             console.log('=== Successfully connected and ready to publish messages. ===');
             if (this.session !== null) {
-                console.log(messageText);
                 var message = solace.SolclientFactory.createMessage();
                 message.setDestination(solace.SolclientFactory.createTopicDestination(topic));
                 message.setBinaryAttachment(messageText);

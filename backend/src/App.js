@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { CssBaseline, withStyles, Button, Typography, Paper, Grid, List, ListItem } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import CheckmarkIcon from '@material-ui/icons/CheckCircleOutline'
 
 import TopicSubscriber from './services/TopicSubscriber';
 import TopicPublisher from './services/TopicPublisher';
@@ -17,7 +18,10 @@ const styles = theme => ({
   },
   grid: {
     padding: '5%',
-  }
+  },
+  userField: {
+    marginLeft: '15px'
+}
 });
 
 class App extends React.Component {
@@ -27,7 +31,9 @@ class App extends React.Component {
     this.state = {
       session: props.session,
       questions: [],
-      users: []
+      users: [],
+      userStatus: {},
+      usersReady: 0
     }
     
     this.updateView = this.updateView.bind(this);
@@ -37,10 +43,30 @@ class App extends React.Component {
 
     var idSubscriber = new TopicSubscriber(this, 'userid');
     idSubscriber.run();
+
+    var statusSubscriber = new TopicSubscriber(this, 'userstatus');
+    statusSubscriber.run();
+
+    var questionSubscriber = new TopicSubscriber(this, 'requestquestions');
+    questionSubscriber.run();
+  }
+
+  updateUserStatus(user) {
+    var newUsers = this.state.usersReady;
+    var statuses = this.state.userStatus;
+    if (this.state.userStatus[user]) {
+      newUsers += 1;
+    } else {
+      newUsers -= 1;
+    }
+    statuses[user] = !this.state.userStatus[user];
+    this.setState({
+      usersReady: newUsers,
+      userStatus: statuses
+    });
   }
 
   updateView(msg) {
-    console.log("Updating:" + msg);
     var qs = this.state.questions;
     qs.push(msg);
     this.setState({
@@ -51,8 +77,24 @@ class App extends React.Component {
   updateUsers(name) {
     var us = this.state.users;
     us.push(name);
+    var statuses = this.state.userStatus;
+    statuses[name] = true;
     this.setState({
-      users: us
+      users: us,
+      userStatus: statuses
+    });
+  }
+
+  sendUsers(name) {
+    var publisher = new TopicPublisher('userCount');
+    publisher.publish(this.state.users.length.toString());
+  }
+
+  sendQuestions(name) {
+    console.log("Sending Questions");
+    this.state.questions.forEach(question => {
+      var publisher = new TopicPublisher('askpage');
+      publisher.publish(question);
     });
   }
 
@@ -62,7 +104,7 @@ class App extends React.Component {
       <ListItem><Typography>{question}</Typography></ListItem>
     ));
     const listNames = this.state.users.map((user) => (
-      <ListItem><Typography>{user}</Typography></ListItem>
+      <ListItem><CheckmarkIcon style={{visibility: !this.state.userStatus[user] ? 'visible' : 'hidden' }}/><Typography className={classes.userField}>{user}</Typography></ListItem>
     ));
 
     return(
@@ -82,7 +124,7 @@ class App extends React.Component {
           <Grid item xs className={classes.gridItem}>
             <Paper>
               <List className={classes.root}>
-              <Typography className={classes.grid}>Current Students</Typography>
+              <Typography className={classes.grid}>Current Students ({this.state.usersReady} ready)</Typography>
                 {listNames}
               </List>
             </Paper>
