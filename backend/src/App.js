@@ -47,8 +47,8 @@ class App extends React.Component {
     var statusSubscriber = new TopicSubscriber(this, 'userstatus');
     statusSubscriber.run();
 
-    var statusSubscriber = new TopicSubscriber(this, 'requestquestions');
-    statusSubscriber.run();
+    var questionSubscriber = new TopicSubscriber(this, 'requestquestions');
+    questionSubscriber.run();
   }
 
   updateUserStatus(user) {
@@ -86,14 +86,14 @@ class App extends React.Component {
   }
 
   sendUsers(name) {
-    var publisher = new TopicPublisher(this.state.session, 'userCount');
+    var publisher = new TopicPublisher('userCount');
     publisher.publish(this.state.users.length.toString());
   }
 
   sendQuestions(name) {
     console.log("Sending Questions");
-    var publisher = new TopicPublisher(this.state.session, 'askpage');
     this.state.questions.forEach(question => {
+      var publisher = new TopicPublisher('askpage');
       publisher.publish(question);
     });
   }
