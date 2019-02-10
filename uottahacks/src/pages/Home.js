@@ -173,6 +173,7 @@ class Home extends React.Component {
 
     return (
         <Paper className={classes.mainContainer}>
+        <img src="YesBrainerLogo.png" width="240" height="160"/>
             <Typography variant="h4">YesBrainer</Typography>
             <Typography variant="body1">Enter your name below to join a study group, press done when everyone in your group is ready to begin the session!</Typography>
             <form className={classes.container} noValidate autoComplete="off">
