@@ -97,6 +97,9 @@ class TopicSubscriber {
                 case "userid":
                     view.updateUsers(message.getBinaryAttachment());
                     break;
+                case "userstatus":
+                    view.updateUserStatus(message.getBinaryAttachment());
+                    break;
                 default:
                     view.updateView(message.getBinaryAttachment());
             }
