@@ -2,7 +2,9 @@ import React, { Fragment } from 'react';
 import { CssBaseline, withStyles, Button, TextField } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import TopicPublisher from './services/TopicPublisher'
+import TopicPublisher from './services/TopicPublisher';
+import AnswerQuestion from './pages/AnswerQuestion';
+import Home from './pages/Home';
 
 const styles = theme => ({
   mainContainer: {
@@ -51,19 +53,11 @@ class App extends React.Component {
         <div className={classes.mainContainer}>
           <Fragment>
             <CssBaseline />
-            <form className={classes.container} noValidate autoComplete="off">
-              <TextField
-                id="standard-name"
-                label="Name"
-                className={classes.textField}
-                value={this.state.input}
-                onChange={this.handleChange('input')}
-                margin="normal"
-              />
-            </form>
-            <Button onClick={this.sendMsg}>
-              Send Msg
-            </Button>
+            <div classes={classes.main}>
+              <Route exact path="/" component={Home} />
+              <Route path="/answer/" component={AnswerQuestion} />
+              <Route path="/ask/" component={AnswerQuestion} />
+            </div>
           </Fragment>
         </div>
       </Router>

@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import { CssBaseline, withStyles, Button, TextField } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
+import TopicPublisher from '../services/TopicPublisher';
+
 const styles = theme => ({
   mainContainer: {
     backgroundColor: '#85C7F2',
@@ -18,7 +20,7 @@ const styles = theme => ({
   }
 });
 
-class AnswerQuestion extends React.Component {
+class Home extends React.Component {
   constructor(props) {
     super(props);
 
@@ -33,8 +35,8 @@ class AnswerQuestion extends React.Component {
   sendMsg() {
     console.log("Sending msg" + this.state.session);
     // create the publisher, specifying the name of the subscription topic
-    // var publisher = new TopicPublisher(this.state.session, 'tutorial/topic');
-    // publisher.publish(this.state.input);
+    var publisher = new TopicPublisher(this.state.session, 'tutorial/topic');
+    publisher.publish(this.state.input);
   }
 
   handleChange = field => event => {
@@ -46,9 +48,22 @@ class AnswerQuestion extends React.Component {
 
     return(
     <div className={classes.mainContainer}>
+        <form className={classes.container} noValidate autoComplete="off">
+            <TextField
+            id="standard-name"
+            label="Name"
+            className={classes.textField}
+            value={this.state.input}
+            onChange={this.handleChange('input')}
+            margin="normal"
+            />
+        </form>
+        <Button onClick={this.sendMsg}>
+            Send Msg
+        </Button>
     </div>
     );
   }
 }
 
-export default withStyles(styles)(AnswerQuestion);
+export default withStyles(styles)(Home);

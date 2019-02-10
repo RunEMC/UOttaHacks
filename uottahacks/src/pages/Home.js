@@ -33,8 +33,8 @@ class Home extends React.Component {
   sendMsg() {
     console.log("Sending msg" + this.state.session);
     // create the publisher, specifying the name of the subscription topic
-    var publisher = new TopicPublisher(this.state.session, 'tutorial/topic');
-    publisher.publish(this.state.input);
+    // var publisher = new TopicPublisher(this.state.session, 'tutorial/topic');
+    // publisher.publish(this.state.input);
   }
 
   handleChange = field => event => {
