@@ -42,7 +42,9 @@ class App extends React.Component {
       usersReady: 0,
       userSolutions: [],
       sentQuestion: false,
-      usersDone: 0
+      usersDone: 0,
+      rawSolutions: [],
+      sentSolutions: false
     }
     
     this.updateView = this.updateView.bind(this);
@@ -64,6 +66,22 @@ class App extends React.Component {
 
     var ucountSubscriber = new TopicSubscriber(this, 'getusers');
     ucountSubscriber.run();
+
+    var responsesSubscriber = new TopicSubscriber(this, 'requestresponses');
+    responsesSubscriber.run();
+  }
+
+  sendResponses() {
+    if (!this.state.sentSolutions) {
+      this.setState({
+        sentSolutions: true
+      });
+      console.log("Sending Solutions");
+      this.state.rawSolutions.forEach(solution => {
+        var publisher = new TopicPublisher('getresponses');
+        publisher.publish(solution);
+      });
+    }
   }
 
   updateUserStatus(user) {
@@ -101,6 +119,8 @@ class App extends React.Component {
   }
 
   updateSolutions(solutionobj) {
+    var raw = this.state.rawSolutions;
+    raw.push(solutionobj);
     var sol = solutionobj.split(":");
     var index = parseInt(sol[1]);
     var curSol = this.state.userSolutions;
@@ -118,9 +138,18 @@ class App extends React.Component {
       newDone += 1;
     }
     
+    if (newDone >= this.state.users.length) {
+      this.setState({
+        sentQuestion: false
+      });
+      var publisher = new TopicPublisher('solutionspage');
+      publisher.publish("solpage");
+    }
+
     this.setState({
       userSolutions: curSol,
-      usersDone: newDone
+      usersDone: newDone,
+      rawSolutions: raw
     });
     console.log(this.state.userSolutions);
   }

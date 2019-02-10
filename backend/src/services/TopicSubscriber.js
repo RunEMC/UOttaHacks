@@ -103,6 +103,9 @@ class TopicSubscriber {
                 case "requestquestions":
                     view.sendQuestions(message.getBinaryAttachment());
                     break;
+                case "requestresponses":
+                    view.sendResponses(message.getBinaryAttachment());
+                    break;
                 case "getusers":
                     view.sendUsers(message.getBinaryAttachment());
                     break;

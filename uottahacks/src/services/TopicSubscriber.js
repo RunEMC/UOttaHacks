@@ -110,6 +110,12 @@ class TopicSubscriber {
                 case "usercount":
                     view.updateUserCount(message.getBinaryAttachment());
                     break;
+                case "getresponses":
+                    view.updateSolutions(message.getBinaryAttachment());
+                    break;
+                case "solutionspage":
+                    view.moveToResponsePage(message.getBinaryAttachment());
+                    break;
                 default:
                     view.updateView(message.getBinaryAttachment());
             }

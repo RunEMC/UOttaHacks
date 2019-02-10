@@ -5,6 +5,7 @@ import TopicPublisher from './services/TopicPublisher';
 import AnswerQuestion from './pages/AnswerQuestion';
 import AskQuestion from './pages/AskQuestion';
 import Home from './pages/Home';
+import Responses from './pages/Responses';
 
 const styles = theme => ({
   mainContainer: {
@@ -59,6 +60,7 @@ class App extends React.Component {
               <Route exact path="/" component={Home} />
               <Route path="/answer/" component={AnswerQuestion} />
               <Route path="/ask/" component={AskQuestion} />
+              <Route path="/responses/" component={Responses} />
             </div>
           </Fragment>
         </div>

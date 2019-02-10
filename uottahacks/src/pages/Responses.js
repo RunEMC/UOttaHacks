@@ -1,5 +1,5 @@
 import React, { Fragment, Children } from 'react';
-import { CssBaseline, withStyles, Button, TextField, Card, CardContent, ExpansionPanel, ExpansionPanelDetails, Typography } from '@material-ui/core';
+import { CssBaseline, withStyles, List, ListItem, Grid, Paper, Typography } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CardActions from '@material-ui/core/CardActions';
 
@@ -31,7 +31,7 @@ const styles = theme => ({
   }
 });
 
-class AnswerQuestion extends React.Component {
+class Responses extends React.Component {
   constructor(props) {
     super(props);
 
@@ -44,6 +44,7 @@ class AnswerQuestion extends React.Component {
       session: props.session,
       input: '',
       questions: [],
+      userSolutions: [],
       curPos: 0,
       isDone: false,
       userName: username
@@ -53,23 +54,43 @@ class AnswerQuestion extends React.Component {
 
     var questionSubscriber = new TopicSubscriber(this, 'askpage');
     questionSubscriber.run();
+    
+    var respSubscriber = new TopicSubscriber(this, 'getresponses');
+    respSubscriber.run();
+  }
 
-    var solSubscriber = new TopicSubscriber(this, 'solutionspage');
-    solSubscriber.run();
+  updateSolutions(solutionobj) {
+    var sol = solutionobj.split(":");
+    var index = parseInt(sol[1]);
+    var curSol = this.state.userSolutions;
+    var newSol = curSol[index];
+    if (newSol == undefined) {
+      newSol = {};
+      newSol[sol[0]] = sol[2];
+      curSol.push(newSol);
+    } else {
+      newSol[sol[0]] = sol[2];
+      curSol[index] = newSol;
+    }
+    var newDone = this.state.usersDone;
+    if (index == this.state.questions.length - 1) {
+      newDone += 1;
+    }
+    
+    this.setState({
+      userSolutions: curSol,
+      usersDone: newDone
+    });
+    console.log(this.state.userSolutions);
   }
 
   beginRequestingQuestions() {
     console.log("Requesting questions");
     var publisher = new TopicPublisher('requestquestions');
     publisher.publish(this.state.input);
-    this.setState({
-        isSignedIn: true,
-        user: this.state.input
-    });
-  }
-
-  moveToResponsePage(res) {
-    this.props.history.push('/responses/');
+    
+    var publisherResp = new TopicPublisher('requestresponses');
+    publisherResp.publish(this.state.input);
   }
 
   sendMsg() {
@@ -91,12 +112,12 @@ class AnswerQuestion extends React.Component {
   }
 
   updateAndSetQuestions(question) {
-    console.log("Getting Questions:" + question)
     var questions = this.state.questions;
     questions.push(question);
     this.setState({
       questions: questions
     });
+    console.log("QUEIEAJTAEUIFAEU" + question)
   }
 
   handleChange = field => event => {
@@ -105,42 +126,39 @@ class AnswerQuestion extends React.Component {
 
   render() {
     const { classes } = this.props;
+    const listQuestions = this.state.questions.map((question, index) => {
+      const listResponses = this.state.userSolutions.length > index ? Object.keys(this.state.userSolutions[index]).map((user) => (
+        <ListItem button className={classes.solutions}>
+          <Typography>{user}: {this.state.userSolutions[index][user]}</Typography>
+        </ListItem>
+      )) : <div></div>;
+
+      return (
+      <ListItem button>
+        <Grid container direction="column">
+          <Grid item xs>
+            <Typography className={classes.question}>{question}</Typography>
+          </Grid>
+          <Grid item xs>
+            <List>
+              {listResponses}
+            </List>
+          </Grid>
+        </Grid>
+      </ListItem>
+    )});
 
     return(
-    <div className={classes.mainContainer}>
-      <Card className={classes.card} styles="width:10px;height:10px;">
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Question {this.state.curPos + 1}:
-          </Typography>
-          <Typography className={classes.questiontext}>
-            {this.state.questions[this.state.curPos]}
-          </Typography>
-        </CardContent>
-        <form className={classes.container} noValidate autoComplete="off">
-          <TextField
-          disabled={this.state.isDone} 
-          id="response"
-          label="Response"
-          multiline
-          className={classes.textField}
-          value={this.state.input}
-          onChange={this.handleChange('input')}
-          margin="normal"
-          fullWidth
-          />
-          <Button variant="contained" disabled={this.state.isDone} className={classes.button} onClick={this.sendMsg}>
-            Next
-          </Button>
-          <Button variant="contained" disabled={this.state.isDone} className={classes.button} onClick={this.sendMsg}>
-            Skip
-          </Button>
-        </form>
-      </Card>
-    
-    </div>
+      <div className={classes.mainContainer}>
+        <Paper>
+          <List className={classes.root}>
+          <Typography variant="h5" className={classes.grid} style={{margin: '15px'}}>Responses</Typography>
+            {listQuestions}
+          </List>
+        </Paper>
+      </div>
     );
   }
 }
 
-export default withStyles(styles)(AnswerQuestion);
+export default withStyles(styles)(Responses);
