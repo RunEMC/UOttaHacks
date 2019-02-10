@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
-import { CssBaseline, withStyles, Button, TextField, Paper } from '@material-ui/core';
+import { CssBaseline, withStyles, Button, TextField, Paper, List, ListItem, Typography } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import TopicPublisher from '../services/TopicPublisher';
+import TopicSubscriber from '../services/TopicSubscriber';
 
 const styles = theme => ({
   headingOne:{
@@ -35,9 +36,13 @@ class Home extends React.Component {
       input: '',
       isSignedIn: false,
       isBlank: true,
+      users: []
     }
 
     this.sendMsg = this.sendMsg.bind(this);
+    
+    var idSubscriber = new TopicSubscriber(this, 'userid');
+    idSubscriber.run();
   }
 
   sendMsg() {
@@ -47,6 +52,14 @@ class Home extends React.Component {
     publisher.publish(this.state.input);
     this.setState({
         isSignedIn: true
+    });
+  }
+
+  updateUsers(name) {
+    var us = this.state.users;
+    us.push(name);
+    this.setState({
+      users: us
     });
   }
 
@@ -65,30 +78,41 @@ class Home extends React.Component {
 
   render() {
     const { classes } = this.props;
+    const listNames = this.state.users.map((user) => (
+      <ListItem><Typography>{user}</Typography></ListItem>
+    ));
 
-    return(
-    <Paper className={classes.main}>
-        <h1 className={classes.headingOne}>Welcome</h1>
-        <h2 className={classes.headingTwo}>I want to:</h2>
-        <form className={classes.container} noValidate autoComplete="off">
-            <TextField
-            disabled={this.state.isSignedIn}
-            id="name"
-            label="Name"
-            className={classes.textField}
-            value={this.state.input}
-            onChange={this.handleChange('input')}
-            margin="normal"
-            />
-            <Button disabled={this.state.isSignedIn || this.state.isBlank} className={classes.button} onClick={this.sendMsg}>
-                Sign In
-            </Button>
-            <Button className={classes.button} onClick={this.registerDone}>
-                Done
-            </Button>
-        </form>
-   
-    </Paper>
+    return (
+        <Paper>
+            <h1 className={classes.headingOne}>Welcome</h1>
+            <h2 className={classes.headingTwo}>I want to:</h2>
+            <form className={classes.container} noValidate autoComplete="off">
+                <TextField
+                disabled={this.state.isSignedIn}
+                id="name"
+                label="Name"
+                className={classes.textField}
+                value={this.state.input}
+                onChange={this.handleChange('input')}
+                margin="normal"
+                fullWidth
+                />
+                <Button disabled={this.state.isSignedIn || this.state.isBlank} className={classes.button} onClick={this.sendMsg}>
+                    Sign In
+                </Button>
+            </form>
+            <div style={{visibility: this.state.users.length ? 'visible' : 'hidden' }}>
+                <Paper>
+                    <List className={classes.root}>
+                    <Typography className={classes.grid}>Current Students</Typography>
+                        {listNames}
+                    </List>
+                </Paper>
+                <Button className={classes.button} onClick={this.registerDone}>
+                    Done
+                </Button>
+            </div>
+        </Paper>
     );
   }
 }

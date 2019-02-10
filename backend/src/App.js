@@ -2,7 +2,8 @@ import React, { Fragment } from 'react';
 import { CssBaseline, withStyles, Button, Typography, Paper, Grid, List, ListItem } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import TopicSubscriber from './services/TopicSubscriber'
+import TopicSubscriber from './services/TopicSubscriber';
+import TopicPublisher from './services/TopicPublisher';
 
 const styles = theme => ({
   mainContainer: {
