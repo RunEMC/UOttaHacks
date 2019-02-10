@@ -2,7 +2,14 @@ import React, { Fragment } from 'react';
 import { CssBaseline, withStyles, Button, TextField } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
+
 const styles = theme => ({
+  headingOne:{
+fontSize: 56,
+  },
+  headingTwo:{
+    fontSize: 32,
+      },
   mainContainer: {
     backgroundColor: '#85C7F2',
     minHeight: '100vh',
@@ -24,7 +31,8 @@ class Home extends React.Component {
 
     this.state = {
       session: props.session,
-      input: ''
+      input: '',
+      
     }
 
     this.sendMsg = this.sendMsg.bind(this);
@@ -46,6 +54,16 @@ class Home extends React.Component {
 
     return(
     <div className={classes.mainContainer}>
+    
+    <h1 className={classes.headingOne}>Welcome</h1>
+    <h2 className={classes.headingTwo}>I want to:</h2>
+    <Button variant="contained" color="primary">
+      Ask
+    </Button>
+    <Button variant="contained" color="primary">
+      Done
+    </Button>
+   
     </div>
     );
   }
