@@ -1,16 +1,14 @@
 import React, { Fragment, Children } from 'react';
-import { CssBaseline, withStyles, Button, TextField,Paper, Card, CardContent, ExpansionPanel, ExpansionPanelDetails } from '@material-ui/core';
+import { CssBaseline, withStyles, fontFamily, Button, TextField,Paper, Card, CardContent, ExpansionPanel, ExpansionPanelDetails,Typography } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CardActions from '@material-ui/core/CardActions';
-
-
-import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   mainContainer: {
     backgroundColor: '#85C7F2',
     minHeight: '100vh',
-    height: '100%'
+    height: '100%',
+    fontFamily:"Roboto"
   },
   main: {
     zIndex: -1,
@@ -65,7 +63,7 @@ class AnswerQuestion extends React.Component {
        <form className={classes.container}>
        <br/>
        <br/>
-       <textarea styles="font-family:Helvetica;font-size:12px;"
+       <textarea styles="fontFamily:'Helvetica';fontSize:'12px';"
        align="center"
        rows="15" cols="50"
        onChange={this.handleChange('input')}/>
