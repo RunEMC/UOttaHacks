@@ -46,15 +46,17 @@ class App extends React.Component {
 
     var statusSubscriber = new TopicSubscriber(this, 'userstatus');
     statusSubscriber.run();
-
-    var questionSubscriber = new TopicSubscriber(this, 'requestquestions');
-    questionSubscriber.run();
   }
 
   updateUserStatus(user) {
+    console.log(this.state.userStatus[user]);
     var newUsers = this.state.usersReady;
     var statuses = this.state.userStatus;
     if (this.state.userStatus[user]) {
+      if (this.state.usersReady + 1 >= this.state.users.length) {
+        var publisher = new TopicPublisher(this.state.session, 'askpage');
+        publisher.publish(this.state.questions);
+      }
       newUsers += 1;
     } else {
       newUsers -= 1;
