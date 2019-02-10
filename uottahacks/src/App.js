@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { CssBaseline, withStyles, Button, TextField, AppBar } from '@material-ui/core';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import image from './Logo/YesBrainerLogo.png';
 import TopicPublisher from './services/TopicPublisher';
 import AnswerQuestion from './pages/AnswerQuestion';
 import AskQuestion from './pages/AskQuestion';
@@ -54,6 +53,17 @@ class App extends React.Component {
       <Router>
         <div className={classes.mainContainer}>
         <head Title="YesBrainer"></head>
+          <div>
+          &nbsp;
+            <Link to="/" className={classes.text}>
+            <img src="YesBrainerLogo.png" width="60" height="40"/>
+            Home</Link>
+            &nbsp;
+            <Link to="/answer/" className={classes.text} >Answer</Link>
+            &nbsp;
+            <Link to="/ask/" className={classes.text} >Ask</Link>
+            &nbsp;
+          </div>
           <Fragment>
             <CssBaseline />
             <div classes={classes.main}>
