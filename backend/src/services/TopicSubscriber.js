@@ -28,10 +28,13 @@
 import solace from 'solclientjs';
 
 class TopicSubscriber {
-    constructor(sess, topic) {
+    constructor(ui, topic) {
         this.subscriber = {
+            view: ui,
             topicName: topic
         }
+
+        // this.subscriber.view.updateView("Test");
 
         // Initialize factory with the most recent API defaults
         var factoryProps = new solace.SolclientFactoryProperties();
@@ -54,6 +57,7 @@ class TopicSubscriber {
     
     run() {
         var subscriberSession = this.session;
+        var view = this.subscriber.view;
 
         // define session event listeners
         this.session.on(solace.SessionEventCode.UP_NOTICE, function (sessionEvent) {
@@ -83,6 +87,7 @@ class TopicSubscriber {
 
         // define message event listener
         this.session.on(solace.SessionEventCode.MESSAGE, function (message) {
+            view.updateView(message.getBinaryAttachment());
             console.log('Received message: "' + message.getBinaryAttachment() + '", details:\n' +
                 message.dump());
         });

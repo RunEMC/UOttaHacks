@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { CssBaseline, withStyles, Button } from '@material-ui/core';
+import { CssBaseline, withStyles, Button, Typography } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import TopicSubscriber from './services/TopicSubscriber'
@@ -25,11 +25,21 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      session: props.session
+      session: props.session,
+      message: ''
     }
     
-    var subscriber = new TopicSubscriber(this.state.session, 'uottahacks');
+    this.updateView = this.updateView.bind(this);
+
+    var subscriber = new TopicSubscriber(this, 'uottahacks');
     subscriber.run();
+  }
+
+  updateView(msg) {
+    console.log("Updating:" + msg);
+    this.setState({
+      message: msg
+    });
   }
 
   render() {
@@ -43,6 +53,9 @@ class App extends React.Component {
             <Button onClick={this.sendMsg}>
               Send Msg
             </Button>
+            <Typography>
+              {this.state.message}
+            </Typography>
           </Fragment>
         </div>
       </Router>
