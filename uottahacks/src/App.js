@@ -11,7 +11,8 @@ const styles = theme => ({
   mainContainer: {
     backgroundColor: '#85C7F2',
     minHeight: '100vh',
-    height: '100%'
+    height: '100%',
+    paddingTop: '15px'
   },
   main: {
     zIndex: -1,
@@ -53,11 +54,6 @@ class App extends React.Component {
       <Router>
         <div className={classes.mainContainer}>
         <head Title="YesBrainer"></head>
-          <div>
-            <Link to="/" className={classes.text}>Home</Link>
-            <Link to="/answer/" className={classes.text}>Answer</Link>
-            <Link to="/ask/" className={classes.text}>Ask</Link>
-          </div>
           <Fragment>
             <CssBaseline />
             <div classes={classes.main}>

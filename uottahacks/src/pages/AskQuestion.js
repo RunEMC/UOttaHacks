@@ -24,13 +24,18 @@ class AskQuestion extends React.Component {
   constructor(props) {
     super(props);
 
+    var username = this.props.location.pathname;
+    var arr = username.split('/ask/');
+    username = arr[1];
+
     this.state = {
       session: props.session,
       input: '',
       isDone: false,
       readyStatus: "Ready Up",
       usersReady: 0,
-      userCount: 0
+      userCount: 0,
+      userName: username,
     }
 
     this.sendMsg = this.sendMsg.bind(this);
@@ -55,6 +60,7 @@ class AskQuestion extends React.Component {
   }
 
   beginRequestingQuestions() {
+      console.log("REQUESTING");
     var publisher = new TopicPublisher('getusers');
     publisher.publish(this.state.input);
   }
@@ -68,15 +74,18 @@ class AskQuestion extends React.Component {
   }
 
   updateUserCount(count) {
+      console.log("COUNT: " + count);
       this.setState({
           userCount: parseInt(count)
       })
   }
 
   updateWaitingClients(name) {
+      
     var nowReady = this.state.usersReady + 1;
+    console.log(nowReady + " VS " + this.state.userCount);
     if (nowReady >= this.state.userCount) {
-        this.props.history.push('/answer/');
+        this.props.history.push('/answer/' + this.state.userName);
     } else {
         this.setState({
             usersReady: nowReady

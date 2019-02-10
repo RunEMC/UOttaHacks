@@ -21,7 +21,13 @@ const styles = theme => ({
   },
   userField: {
     marginLeft: '15px'
-}
+  },
+  quesion: {
+    width: '100%'
+  },
+  solutions: {
+    paddingLeft: '35px'
+  }
 });
 
 class App extends React.Component {
@@ -33,7 +39,10 @@ class App extends React.Component {
       questions: [],
       users: [],
       userStatus: {},
-      usersReady: 0
+      usersReady: 0,
+      userSolutions: [],
+      sentQuestion: false,
+      usersDone: 0
     }
     
     this.updateView = this.updateView.bind(this);
@@ -49,6 +58,12 @@ class App extends React.Component {
 
     var questionSubscriber = new TopicSubscriber(this, 'requestquestions');
     questionSubscriber.run();
+
+    var responseSubscriber = new TopicSubscriber(this, 'sendsolution');
+    responseSubscriber.run();
+
+    var ucountSubscriber = new TopicSubscriber(this, 'getusers');
+    ucountSubscriber.run();
   }
 
   updateUserStatus(user) {
@@ -85,24 +100,73 @@ class App extends React.Component {
     });
   }
 
+  updateSolutions(solutionobj) {
+    var sol = solutionobj.split(":");
+    var index = parseInt(sol[1]);
+    var curSol = this.state.userSolutions;
+    var newSol = curSol[index];
+    if (newSol == undefined) {
+      newSol = {};
+      newSol[sol[0]] = sol[2];
+      curSol.push(newSol);
+    } else {
+      newSol[sol[0]] = sol[2];
+      curSol[index] = newSol;
+    }
+    var newDone = this.state.usersDone;
+    if (index == this.state.questions.length - 1) {
+      newDone += 1;
+    }
+    
+    this.setState({
+      userSolutions: curSol,
+      usersDone: newDone
+    });
+    console.log(this.state.userSolutions);
+  }
+
   sendUsers(name) {
-    var publisher = new TopicPublisher('userCount');
+    console.log("Sending USERS!");
+    var publisher = new TopicPublisher('usercount');
     publisher.publish(this.state.users.length.toString());
   }
 
   sendQuestions(name) {
-    console.log("Sending Questions");
-    this.state.questions.forEach(question => {
-      var publisher = new TopicPublisher('askpage');
-      publisher.publish(question);
-    });
+    if (!this.state.sentQuestion) {
+      this.setState({
+        sentQuestion: true
+      });
+      console.log("Sending Questions");
+      this.state.questions.forEach(question => {
+        var publisher = new TopicPublisher('askpage');
+        publisher.publish(question);
+      });
+    }
   }
 
   render() {
     const { classes } = this.props;
-    const listQuestions = this.state.questions.map((question) => (
-      <ListItem><Typography>{question}</Typography></ListItem>
-    ));
+    const listQuestions = this.state.questions.map((question, index) => {
+      const listResponses = this.state.userSolutions.length > index ? Object.keys(this.state.userSolutions[index]).map((user) => (
+        <ListItem className={classes.solutions}>
+          <Typography>{user}: {this.state.userSolutions[index][user]}</Typography>
+        </ListItem>
+      )) : <div></div>;
+
+      return (
+      <ListItem>
+        <Grid container direction="column">
+          <Grid item xs>
+            <Typography className={classes.question}>{question}</Typography>
+          </Grid>
+          <Grid item xs>
+            <List>
+              {listResponses}
+            </List>
+          </Grid>
+        </Grid>
+      </ListItem>
+    )});
     const listNames = this.state.users.map((user) => (
       <ListItem><CheckmarkIcon style={{visibility: !this.state.userStatus[user] ? 'visible' : 'hidden' }}/><Typography className={classes.userField}>{user}</Typography></ListItem>
     ));

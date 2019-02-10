@@ -106,6 +106,9 @@ class TopicSubscriber {
                 case "getusers":
                     view.sendUsers(message.getBinaryAttachment());
                     break;
+                case "sendsolution":
+                    view.updateSolutions(message.getBinaryAttachment());
+                    break;
                     
                 default:
                     view.updateView(message.getBinaryAttachment());

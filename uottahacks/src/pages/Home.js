@@ -30,6 +30,10 @@ const styles = theme => ({
     },
     userField: {
         marginLeft: '15px'
+    },
+    description: {
+        marginTop: '35px',
+        marginLeft: '35px'
     }
 });
 
@@ -82,30 +86,6 @@ class Home extends React.Component {
     });
   }
 
-  updateUserStatus(user) {
-    var statuses = this.state.userStatus;
-    statuses[user] = !this.state.userStatus[user];
-    var ready = statuses[user] ? this.state.usersReady + 1 : this.state.usersReady - 1; 
-    this.setState({
-        userStatus: statuses,
-        usersReady: ready
-    });
-    if (this.state.usersReady >= this.state.users.length) {
-        this.props.history.push('/ask/');
-    }
-  }
-
-  updateUsers(name) {
-    var us = this.state.users;
-    us.push(name);
-    var statuses = this.state.userStatus;
-    statuses[name] = false;
-    this.setState({
-      users: us,
-      userStatus: statuses
-    });
-  }
-
   updateUsers(name) {
     var us = this.state.users;
     us.push(name);
@@ -130,19 +110,8 @@ class Home extends React.Component {
         usersReady: ready
     });
     if (this.state.usersReady >= this.state.users.length) {
-        this.props.history.push('/ask/');
+        this.props.history.push('/ask/' + this.state.user);
     }
-  }
-
-  updateUsers(name) {
-    var us = this.state.users;
-    us.push(name);
-    var statuses = this.state.userStatus;
-    statuses[name] = false;
-    this.setState({
-      users: us,
-      userStatus: statuses
-    });
   }
 
   updateAndSetQuestions(questions) {
@@ -174,7 +143,7 @@ class Home extends React.Component {
     return (
         <Paper className={classes.mainContainer}>
             <Typography variant="h4">YesBrainer</Typography>
-            <Typography variant="body1">Enter your name below to join a study group, press done when everyone in your group is ready to begin the session!</Typography>
+            <Typography className={classes.description} variant="body1">Enter your name below to join a study group, press done when everyone in your group is ready to begin the session!</Typography>
             <form className={classes.container} noValidate autoComplete="off">
                 <TextField
                 disabled={this.state.isSignedIn}

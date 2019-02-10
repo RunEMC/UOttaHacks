@@ -24,6 +24,10 @@ const styles = theme => ({
   },
   button: {
     marginRight: '15px'
+  },
+  questiontext: {
+    marginTop: '25px',
+    marginLeft: '15px'
   }
 });
 
@@ -31,11 +35,18 @@ class AnswerQuestion extends React.Component {
   constructor(props) {
     super(props);
 
+    var username = this.props.location.pathname;
+    var arr = username.split('/answer/');
+    username = arr[1];
+    console.log("USERNAME: " + username);
+
     this.state = {
       session: props.session,
       input: '',
       questions: [],
-      curPos: 0
+      curPos: 0,
+      isDone: false,
+      userName: username
     }
 
     this.sendMsg = this.sendMsg.bind(this);
@@ -55,12 +66,18 @@ class AnswerQuestion extends React.Component {
   }
 
   sendMsg() {
-    this.setState({
-      curPos: this.state.curPos + 1
-    });
-    if (this.state.curPos >= this.state.questions.length) {
-
+    if (this.state.curPos + 1 >= this.state.questions.length) {
+      this.setState({
+        isDone: true
+      });
+    } else {
+      this.setState({
+        curPos: this.state.curPos + 1
+      });  
     }
+    console.log("SENDING: " + this.state.userName + ":" + this.state.curPos + ":" + this.state.input);
+    var publisher = new TopicPublisher('sendsolution');
+    publisher.publish(this.state.userName + ":" + this.state.curPos + ":" + this.state.input);
     // create the publisher, specifying the name of the subscription topic
     // var publisher = new TopicPublisher(this.state.session, 'tutorial/topic');
     // publisher.publish(this.state.input);
@@ -87,11 +104,15 @@ class AnswerQuestion extends React.Component {
       <Card className={classes.card} styles="width:10px;height:10px;">
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
+            Question {this.state.curPos + 1}:
+          </Typography>
+          <Typography className={classes.questiontext}>
             {this.state.questions[this.state.curPos]}
           </Typography>
         </CardContent>
         <form className={classes.container} noValidate autoComplete="off">
           <TextField
+          disabled={this.state.isDone} 
           id="response"
           label="Response"
           multiline
