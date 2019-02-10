@@ -51,6 +51,11 @@ class App extends React.Component {
     return(
       <Router>
         <div className={classes.mainContainer}>
+          <div>
+            <Link to="/" className={classes.text}>Home</Link>
+            <Link to="/answer/" className={classes.text}>Answer</Link>
+            <Link to="/ask/" className={classes.text}>Ask</Link>
+          </div>
           <Fragment>
             <CssBaseline />
             <div classes={classes.main}>
