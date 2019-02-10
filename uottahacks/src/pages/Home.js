@@ -108,6 +108,14 @@ class Home extends React.Component {
     });
   }
 
+  updateUsers(name) {
+    var us = this.state.users;
+    us.push(name);
+    this.setState({
+      users: us
+    });
+  }
+
   handleChange = field => event => {
     this.setState({ [field]: event.target.value });
     if (event.target.value.length > 0) {
