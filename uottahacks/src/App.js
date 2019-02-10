@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { CssBaseline, withStyles, Button } from '@material-ui/core';
+import { CssBaseline, withStyles, Button, TextField } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import TopicPublisher from './services/TopicPublisher'
@@ -25,7 +25,8 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      session: props.session
+      session: props.session,
+      input: ''
     }
 
     this.sendMsg = this.sendMsg.bind(this);
@@ -35,8 +36,12 @@ class App extends React.Component {
     console.log("Sending msg" + this.state.session);
     // create the publisher, specifying the name of the subscription topic
     var publisher = new TopicPublisher(this.state.session, 'tutorial/topic');
-    publisher.run();
+    publisher.publish(this.state.input);
   }
+
+  handleChange = field => event => {
+    this.setState({ [field]: event.target.value });
+  };
 
   render() {
     const { classes } = this.props;
@@ -46,6 +51,16 @@ class App extends React.Component {
         <div className={classes.mainContainer}>
           <Fragment>
             <CssBaseline />
+            <form className={classes.container} noValidate autoComplete="off">
+              <TextField
+                id="standard-name"
+                label="Name"
+                className={classes.textField}
+                value={this.state.input}
+                onChange={this.handleChange('input')}
+                margin="normal"
+              />
+            </form>
             <Button onClick={this.sendMsg}>
               Send Msg
             </Button>
