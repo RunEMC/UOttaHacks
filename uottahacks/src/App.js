@@ -54,7 +54,7 @@ class App extends React.Component {
         <head Title="YesBrainer"></head>
           <div>
           &nbsp;
-            <Link to="/" className={classes.text}>
+            <Link to="/" className={classes.text} >
             <img src="YesBrainerLogo.png" width="60" height="40"/>
             Home</Link>
             &nbsp;
