@@ -103,8 +103,11 @@ class Home extends React.Component {
   updateUsers(name) {
     var us = this.state.users;
     us.push(name);
+    var statuses = this.state.userStatus;
+    statuses[name] = false;
     this.setState({
-      users: us
+      users: us,
+      userStatus: statuses
     });
   }
 
