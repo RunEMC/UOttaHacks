@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import { CssBaseline, withStyles, Button } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
+import TopicPublisher from './services/TopicPublisher'
+
 const styles = theme => ({
   mainContainer: {
     backgroundColor: '#85C7F2',
@@ -30,7 +32,10 @@ class App extends React.Component {
   }
 
   sendMsg() {
-    console.log("Sending msg");
+    console.log("Sending msg" + this.state.session);
+    // create the publisher, specifying the name of the subscription topic
+    var publisher = new TopicPublisher(this.state.session, 'tutorial/topic');
+    publisher.run();
   }
 
   render() {

@@ -25,6 +25,95 @@
 
 /*jslint es6 node:true devel:true*/
 
+import solace from 'solclientjs';
+
+class TopicSubscriber {
+    constructor(sess, topic) {
+        this.subscriber = {
+            topicName: topic
+        }
+
+        // Initialize factory with the most recent API defaults
+        var factoryProps = new solace.SolclientFactoryProperties();
+        factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+        solace.SolclientFactory.init(factoryProps);
+
+        this.session = solace.SolclientFactory.createSession({ 
+            url: "ws://mr4b11zr8yp.messaging.mymaas.net:80", 
+            vpnName: "msgvpn-4b11zr8xv", 
+            userName: "solace-cloud-client", 
+            password: "ndll0aatbdoghi2h6stjmdgg4j", 
+        }); 
+        try { 
+            this.session.connect(); 
+            console.log("Connected");
+        } catch (error) { 
+            console.log(error); 
+        }
+    }
+    
+    run() {
+        // define session event listeners
+        this.session.on(solace.SessionEventCode.UP_NOTICE, function (sessionEvent) {
+            console.log('=== Successfully connected and ready to subscribe. ===');
+            this.subscribe();
+        });
+        // this.session.on(solace.SessionEventCode.CONNECT_FAILED_ERROR, function (sessionEvent) {
+        //     subscriber.log('Connection failed to the message router: ' + sessionEvent.infoStr +
+        //         ' - check correct parameter values and connectivity!');
+        // });
+        // this.session.on(solace.SessionEventCode.DISCONNECTED, function (sessionEvent) {
+        //     subscriber.log('Disconnected.');
+        //     subscriber.subscribed = false;
+        //     if (this.session !== null) {
+        //         this.session.dispose();
+        //         this.session = null;
+        //     }
+        // });
+        // this.session.on(solace.SessionEventCode.SUBSCRIPTION_ERROR, function (sessionEvent) {
+        //     subscriber.log('Cannot subscribe to topic: ' + sessionEvent.correlationKey);
+        // });
+        // this.session.on(solace.SessionEventCode.SUBSCRIPTION_OK, function (sessionEvent) {
+        //     if (subscriber.subscribed) {
+        //         subscriber.subscribed = false;
+        //         subscriber.log('Successfully unsubscribed from topic: ' + sessionEvent.correlationKey);
+        //     } else {
+        //         subscriber.subscribed = true;
+        //         subscriber.log('Successfully subscribed to topic: ' + sessionEvent.correlationKey);
+        //         subscriber.log('=== Ready to receive messages. ===');
+        //     }
+        // });
+        // // define message event listener
+        // this.session.on(solace.SessionEventCode.MESSAGE, function (message) {
+        //     subscriber.log('Received message: "' + message.getBinaryAttachment() + '", details:\n' +
+        //         message.dump());
+        // });
+    }
+
+    subscribe() {
+        if (this.session !== null) {
+            // if (this.subscriber.subscribed) {
+            //     console.log('Already subscribed to "' + this.subscriber.topicName
+            //         + '" and ready to receive messages.');
+            // } else {
+                console.log('Subscribing to topic: ' + this.subscriber.topicName);
+                try {
+                    this.session.subscribe(
+                        solace.SolclientFactory.createTopicDestination(this.subscriber.topicName),
+                        true, // generate confirmation when subscription is added successfully
+                        this.subscriber.topicName, // use topic name as correlation key
+                        10000 // 10 seconds timeout for this operation
+                    );
+                } catch (error) {
+                    console.log(error.toString());
+                }
+            // }
+        } else {
+            console.log('Cannot subscribe because not connected to Solace message router.');
+        }
+    }
+}
+
 var TopicSubscriber = function (solaceModule, topicName) {
     'use strict';
     var solace = solaceModule;
